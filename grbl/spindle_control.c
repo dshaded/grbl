@@ -39,6 +39,9 @@ void spindle_init()
     #ifdef USE_SPINDLE_DIR_AS_ENABLE_PIN
       SPINDLE_ENABLE_DDR |= (1<<SPINDLE_ENABLE_BIT); // Configure as output pin.
     #else
+      #ifndef ENABLE_M7
+        SPINDLE_ENABLE_DDR |= (1<<SPINDLE_ENABLE_BIT); // Configure as output pin.
+      #endif
       SPINDLE_DIRECTION_DDR |= (1<<SPINDLE_DIRECTION_BIT); // Configure as output pin.
     #endif
 
@@ -93,7 +96,7 @@ void spindle_stop()
 {
   #ifdef VARIABLE_SPINDLE
     SPINDLE_TCCRA_REGISTER &= ~(1<<SPINDLE_COMB_BIT); // Disable PWM. Output voltage is zero.
-    #ifdef USE_SPINDLE_DIR_AS_ENABLE_PIN
+    #if defined(USE_SPINDLE_DIR_AS_ENABLE_PIN) || !defined(ENABLE_M7)
       #ifdef INVERT_SPINDLE_ENABLE_PIN
         SPINDLE_ENABLE_PORT |= (1<<SPINDLE_ENABLE_BIT);  // Set pin to high
       #else
@@ -247,7 +250,7 @@ void spindle_stop()
       }
       spindle_set_speed(spindle_compute_pwm_value(rpm));
     #endif
-    #if (defined(USE_SPINDLE_DIR_AS_ENABLE_PIN) && \
+    #if ((defined(USE_SPINDLE_DIR_AS_ENABLE_PIN) || !defined(ENABLE_M7)) && \
         !defined(SPINDLE_ENABLE_OFF_WITH_ZERO_SPEED)) || !defined(VARIABLE_SPINDLE)
       // NOTE: Without variable spindle, the enable bit should just turn on or off, regardless
       // if the spindle speed value is zero, as its ignored anyhow.

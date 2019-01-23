@@ -349,6 +349,7 @@
 // NOTE: Compute duty cycle at the minimum PWM by this equation: (% duty cycle)=(SPINDLE_PWM_MIN_VALUE/255)*100
 // #define SPINDLE_PWM_MIN_VALUE 5 // Default disabled. Uncomment to enable. Must be greater than zero. Integer (1-255).
 
+// !!!!!!!!!!!!!! PATCHED TO USE MIST OUTPUT FOR SPINDLE ENABLE CONTROL WHEN ENABLE_M7 IS OFF  !!!!!!!!!!!!!!!!!!!!!!!!
 // By default on a 328p(Uno), Grbl combines the variable spindle PWM and the enable into one pin to help
 // preserve I/O pins. For certain setups, these may need to be separate pins. This configure option uses
 // the spindle direction pin(D13) as a separate spindle enable pin along with spindle speed PWM on pin D11.

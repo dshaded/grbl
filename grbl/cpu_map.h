@@ -81,7 +81,15 @@
       // If enabled, spindle direction pin now used as spindle enable, while PWM remains on D11.
       #define SPINDLE_ENABLE_BIT    5  // Uno Digital Pin 13 (NOTE: D13 can't be pulled-high input due to LED.)
     #else
-      #define SPINDLE_ENABLE_BIT    3  // Uno Digital Pin 11
+      #ifdef ENABLE_M7
+        #define SPINDLE_ENABLE_BIT    3  // Uno Digital Pin 11
+      #else
+        #undef SPINDLE_ENABLE_DDR
+        #undef SPINDLE_ENABLE_PORT
+        #define SPINDLE_ENABLE_DDR    DDRC
+        #define SPINDLE_ENABLE_PORT   PORTC
+        #define SPINDLE_ENABLE_BIT    4  // Uno Analog Pin 4
+      #endif
     #endif
   #else
     #define SPINDLE_ENABLE_BIT    4  // Uno Digital Pin 12
@@ -96,9 +104,12 @@
   #define COOLANT_FLOOD_DDR   DDRC
   #define COOLANT_FLOOD_PORT  PORTC
   #define COOLANT_FLOOD_BIT   3  // Uno Analog Pin 3
-  #define COOLANT_MIST_DDR   DDRC
-  #define COOLANT_MIST_PORT  PORTC
-  #define COOLANT_MIST_BIT   4  // Uno Analog Pin 4
+
+  #ifdef ENABLE_M7
+    #define COOLANT_MIST_DDR   DDRC
+    #define COOLANT_MIST_PORT  PORTC
+    #define COOLANT_MIST_BIT   4  // Uno Analog Pin 4
+  #endif
 
   // Define user-control controls (cycle start, reset, feed hold) input pins.
   // NOTE: All CONTROLs pins must be on the same port and not on a port with other input pins (limits).
